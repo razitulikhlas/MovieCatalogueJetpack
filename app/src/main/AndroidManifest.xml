@@ -12,7 +12,9 @@
         android:theme="@style/Theme.MovieCatalogue"
         tools:ignore="AllowBackup">
         <activity android:name=".detail.DetailFilm"/>
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".HomeActivity"
+            android:parentActivityName=".HomeActivity"
+            />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

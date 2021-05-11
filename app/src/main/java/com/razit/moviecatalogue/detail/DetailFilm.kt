@@ -1,7 +1,7 @@
 package com.razit.moviecatalogue.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -43,8 +43,8 @@ class DetailFilm : AppCompatActivity() {
                 Glide.with(this@DetailFilm)
                     .load(film.imageUrl)
                     .apply(
-                        RequestOptions.placeholderOf(R.drawable.ic_loading)
-                            .error(R.drawable.ic_error))
+                            RequestOptions.placeholderOf(R.drawable.ic_loading)
+                                    .error(R.drawable.ic_error))
                     .into(imgPoster)
                 tvGenre.text = film.genre
                 tvDesc.text=film.description
@@ -52,9 +52,12 @@ class DetailFilm : AppCompatActivity() {
                 tvDate.text = film.release
                 tvDirector.text = film.director
             }
-
         }
-
-
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 }
