@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".detail.DetailFilm">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,117 +14,163 @@
 
         <ImageView
             android:id="@+id/imgPoster"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:adjustViewBounds="true"
             android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/roboto_bold"
-            android:maxLines="2"
-            android:textColor="#F3423A3A"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgPoster"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Harry Potter and the Deathly Hallows: Part 2" />
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:maxLines="1"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imgPoster"
-            app:layout_constraintTop_toBottomOf="@+id/tvGenre"
-            tools:text="May 7, 2021" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_circle"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvDesc"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerData"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/roboto_light"
-            android:textColor="@color/black"
-            android:textSize="14sp"
+            android:layout_marginBottom="32dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:text="When the world's first generation of superheroes received their powers in the 1930s become the revered elder guard in the present, their superpowered children struggle to live up to the legendary feats of their parents." />
+            app:layout_constraintTop_toBottomOf="@+id/imgPoster">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvGenre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_tab_selected"
+                android:paddingHorizontal="20sp"
+                android:paddingVertical="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Action" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_tab_selected"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGenre"
+                app:layout_constraintStart_toEndOf="@+id/tvGenre"
+                app:layout_constraintTop_toTopOf="@+id/tvGenre">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="@string/start"
+                    android:src="@drawable/star" />
+
+                <TextView
+                    android:id="@+id/tvDetailRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:textColor="@color/gold"
+                    android:textSize="12sp"
+                    tools:text="7.8" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/bg_tab_selected"
+                android:paddingHorizontal="20sp"
+                android:paddingVertical="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout"
+                app:layout_constraintTop_toTopOf="@+id/linearLayout"
+                tools:text="en" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvGenre"
+                app:layout_constraintTop_toBottomOf="@+id/tvGenre"
+                tools:text="Harry Poter" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/white"
+
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+                tools:text="ini description" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="@string/description"
-            android:textColor="@color/black"
-            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgPoster">
+
+            <include
+                android:id="@+id/frameError"
+                layout="@layout/layout_error"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgPoster" />
-
-        <TextView
-            android:id="@+id/tvGenre"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgPoster"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-            tools:text="Action ,Adventure, Drama" />
-
-        <TextView
-            android:id="@+id/tvDirector"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imgPoster"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            tools:text="Shonda Rhimes" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/director"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgPoster"
-            app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
