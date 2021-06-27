@@ -7,49 +7,50 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.razit.moviecatalogue.BuildConfig
 import com.razit.moviecatalogue.adapter.MoviesCallback
 import com.razit.moviecatalogue.data.FilmEntity
-import com.razit.moviecatalogue.databinding.FragmentFilmBinding
+import com.razit.moviecatalogue.databinding.FragmentLocalBinding
 import com.razit.moviecatalogue.detail.DetailFilm
+import com.razit.moviecatalogue.detail.DetailFilmLocal
 import com.razit.moviecatalogue.paging.MoviesPagingAdapter
 import com.razit.moviecatalogue.viewmodel.FilmViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FilmFragment : Fragment(), MoviesCallback {
 
-    private lateinit var fragmentFilmBinding: FragmentFilmBinding
+class LocalFragment : Fragment(), MoviesCallback {
     private val viewModelMovies: FilmViewModel by viewModel()
+
+    private lateinit var fragmentLocalBinding: FragmentLocalBinding
     private lateinit var moviesPagingAdapter: MoviesPagingAdapter
 
-
     companion object {
-
         const val CATEGORY = "category"
 
-        fun newInstance(category: String): FilmFragment {
+        fun newInstance(category: String): LocalFragment {
             val args = Bundle()
             args.putSerializable(CATEGORY, category)
-            val fragment = FilmFragment()
+            val fragment = LocalFragment()
             fragment.arguments = args
             return fragment
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentFilmBinding = FragmentFilmBinding.inflate(layoutInflater, container, false)
-        return fragmentFilmBinding.root
+        fragmentLocalBinding = FragmentLocalBinding.inflate(layoutInflater, container, false)
+        return fragmentLocalBinding.root
     }
 
-    @ExperimentalPagingApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
@@ -59,9 +60,8 @@ class FilmFragment : Fragment(), MoviesCallback {
         }
     }
 
-    @ExperimentalPagingApi
     private fun createFragment() {
-        val category = arguments?.getString(CATEGORY)
+        val category = arguments?.getString(FilmFragment.CATEGORY)
         if (category == BuildConfig.MOVIES) {
             getMovies()
         } else {
@@ -69,36 +69,37 @@ class FilmFragment : Fragment(), MoviesCallback {
         }
     }
 
-    private fun getTvShow() {
-        lifecycleScope.launch {
-            viewModelMovies.flowTvSHow.collectLatest {
-                moviesPagingAdapter.refresh()
-                moviesPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
-                with(fragmentFilmBinding.rcvFilm) {
-                    layoutManager = LinearLayoutManager(activity)
-                    adapter = moviesPagingAdapter
-                }
-            }
-        }
-    }
-
     private fun getMovies() {
         lifecycleScope.launch {
-            viewModelMovies.flowMovies.collectLatest {
+            viewModelMovies.flowLocalMovies.observe(viewLifecycleOwner, {
                 moviesPagingAdapter.refresh()
                 moviesPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
-                with(fragmentFilmBinding.rcvFilm) {
+                with(fragmentLocalBinding.rcvFilm) {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = moviesPagingAdapter
                 }
-            }
+            })
         }
     }
 
+    private fun getTvShow() {
+        lifecycleScope.launch {
+            viewModelMovies.flowLocalTvShow.observe(viewLifecycleOwner, {
+                moviesPagingAdapter.refresh()
+                moviesPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+                with(fragmentLocalBinding.rcvFilm) {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = moviesPagingAdapter
+                }
+            })
+        }
+    }
 
     override fun onClick(movies: FilmEntity) {
-        val intent = Intent(activity, DetailFilm::class.java)
+        val intent = Intent(activity, DetailFilmLocal::class.java)
         intent.putExtra(DetailFilm.DATA, movies)
+        intent.putExtra(DetailFilm.TYPE, DetailFilm.LOCAL)
         startActivity(intent)
     }
+
 }

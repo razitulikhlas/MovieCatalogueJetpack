@@ -1,4 +1,5 @@
 package com.razit.moviecatalogue.viewmodel
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -24,15 +25,19 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner.Silent::class)
 class FilmViewModelTest {
-
     private lateinit var viewModel: FilmViewModel
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val networkMapperMovies: NetworkMapperMovies = NetworkMapperMovies()
+
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
     private lateinit var filmRepository: RepositoryMoviesImpl
@@ -46,7 +51,6 @@ class FilmViewModelTest {
     @Before
     fun setUp() {
         viewModel = FilmViewModel(filmRepository, networkMapperMovies)
-
     }
 
 
@@ -66,6 +70,7 @@ class FilmViewModelTest {
                 )
             )
         )
+
         GlobalScope.launch {
             viewModel.getMovies()
             val data = viewModel.film.value

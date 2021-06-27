@@ -10,4 +10,7 @@
     <string name="back">back</string>
     <string name="load_data">Load data</string>
     <string name="gagal_mengambil_data">Gagal mengambil data</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="favorite">Favorite</string>
 </resources>

@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.cachedIn
+import com.razit.moviecatalogue.BuildConfig
 import com.razit.moviecatalogue.data.FilmEntity
 import com.razit.moviecatalogue.data.maping.NetworkMapperMovies
 import com.razit.moviecatalogue.data.remote.Resource
@@ -13,10 +16,13 @@ import kotlinx.coroutines.launch
 
 class FilmViewModel(
     private val repositoryMovies: RepositoryMoviesImpl,
-    private val networkMapperMovies: NetworkMapperMovies
+    private val networkMapperMovies: NetworkMapperMovies,
 ) : ViewModel() {
     private val _state = MutableLiveData<MainState>()
     val state: LiveData<MainState> = _state
+
+    private var _checkData = MutableLiveData<Boolean>()
+    var checkData: LiveData<Boolean> = _checkData
 
     private val _film = MutableLiveData<List<FilmEntity>>()
     val film: LiveData<List<FilmEntity>> = _film
@@ -29,76 +35,43 @@ class FilmViewModel(
         _state.value = MainState.Loading(b)
     }
 
-    private fun setMessage(message: String) {
-        _state.value = MainState.Message(message)
+    private fun setFailedGetData(data: Boolean) {
+        _state.value = MainState.FailedGetData(data)
+    }
+
+    val flowMovies = repositoryMovies.getMoviesPage().cachedIn(viewModelScope)
+    val flowTvSHow = repositoryMovies.getTvShowPage().cachedIn(viewModelScope)
+    val flowLocalMovies = repositoryMovies.getMoviesFromLocal(BuildConfig.MOVIES)
+    val flowLocalTvShow = repositoryMovies.getMoviesFromLocal(BuildConfig.TVSHOW)
+
+
+
+    fun saveToFavorite(filmEntity: FilmEntity):Long {
+        return repositoryMovies.saveToFavorite(filmEntity)
+    }
+
+    fun deleteFavorite(id: Int, type: String) {
+        repositoryMovies.deleteFilmFavorite(id, type)
+    }
+
+    fun delete(filmEntity: FilmEntity) :Int {
+        return repositoryMovies.delete(filmEntity)
     }
 
 
-    fun getMovies() {
-        setIsLoading(true)
-        EspressoIdlingResource.increment()
+
+    fun checkData(id:Int){
         viewModelScope.launch {
-            when (val response = repositoryMovies.getMovies()) {
-                is Resource.Success -> {
-                    EspressoIdlingResource.decrement()
-                    setIsLoading(false)
-                    val mapMoviesToFilmEntity = response.value.results?.let {
-                        networkMapperMovies.fromMoviesToFilmEntity(it)
-                    }
-                    mapMoviesToFilmEntity.let { _film.value = it }
-                }
-                is Resource.Failure -> {
-                    EspressoIdlingResource.decrement()
-                    setIsLoading(false)
-                    when {
-                        response.isNetworkError -> {
-                        }
-                        else -> {
-                            val message = response.errorBody.toString()
-                            setMessage(message)
-                        }
-                    }
-
-                }
-            }
+            val status = repositoryMovies.isSave(id)
+            _checkData.postValue(status)
         }
-
-    }
-
-    fun getTvShow() {
-        EspressoIdlingResource.increment()
-        setIsLoading(true)
-        viewModelScope.launch {
-            when (val response = repositoryMovies.getTvShow()) {
-                is Resource.Success -> {
-                    EspressoIdlingResource.decrement()
-                    setIsLoading(false)
-                    val mapTvShowToFilmEntity = response.value.results?.let {
-                        networkMapperMovies.fromTvShowToFilmEntity(it)
-                    }
-                    mapTvShowToFilmEntity.let { _film.value = it }
-                }
-                is Resource.Failure -> {
-                    EspressoIdlingResource.decrement()
-                    setIsLoading(false)
-                    when {
-                        response.isNetworkError -> {
-                        }
-                        else -> {
-                            val message = response.errorBody.toString()
-                            setMessage(message)
-                        }
-                    }
-                }
-            }
-        }
-
 
     }
 
 
     fun getDetailTvShow(id: Int) {
         EspressoIdlingResource.increment()
+        setFailedGetData(false)
         setIsLoading(true)
         viewModelScope.launch {
             when (val response = repositoryMovies.getDetailTvShow(id)) {
@@ -113,15 +86,7 @@ class FilmViewModel(
                 is Resource.Failure -> {
                     EspressoIdlingResource.decrement()
                     setIsLoading(false)
-                    when {
-                        response.isNetworkError -> {
-                        }
-                        else -> {
-                            val message = response.errorBody.toString()
-                            setMessage(message)
-                        }
-                    }
-
+                    setFailedGetData(true)
                 }
             }
         }
@@ -129,6 +94,7 @@ class FilmViewModel(
 
     fun getDetailMovies(id: Int) {
         EspressoIdlingResource.increment()
+        setFailedGetData(false)
         setIsLoading(true)
         viewModelScope.launch {
             when (val response = repositoryMovies.getDetailMovies(id)) {
@@ -145,15 +111,7 @@ class FilmViewModel(
                 is Resource.Failure -> {
                     EspressoIdlingResource.decrement()
                     setIsLoading(false)
-                    when {
-                        response.isNetworkError -> {
-                        }
-                        else -> {
-                            val message = response.errorBody.toString()
-                            setMessage(message)
-                        }
-                    }
-
+                    setFailedGetData(true)
                 }
             }
         }
@@ -163,6 +121,6 @@ class FilmViewModel(
 
 sealed class MainState {
     data class Loading(val isLoading: Boolean) : MainState()
-    data class Message(val message: String) : MainState()
-
+    data class FailedGetData(val data: Boolean) : MainState()
+    data class SuccessDelete(val data:Boolean):MainState()
 }

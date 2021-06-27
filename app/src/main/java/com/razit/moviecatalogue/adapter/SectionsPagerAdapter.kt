@@ -1,34 +1,20 @@
 package com.razit.moviecatalogue.adapter
 
-import android.content.Context
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-
-import com.razit.moviecatalogue.R
-import com.razit.moviecatalogue.fragment.FilmFragment
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
 
-class SectionsPagerAdapter(private val mContext: Context, fm: FragmentManager) :
-    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class SectionsPagerAdapter(
+    lifeCycle: Lifecycle,
+    fm: FragmentManager,
+    private val listFragment: List<Fragment>
+) : FragmentStateAdapter(fm, lifeCycle) {
 
-    companion object {
-        @StringRes
-        private val TAB_TITLES = intArrayOf(R.string.movies, R.string.tvShow)
+    override fun getItemCount(): Int = listFragment.size
+
+    override fun createFragment(position: Int): Fragment {
+        return listFragment[position]
     }
-
-    override fun getItem(position: Int): Fragment =
-        when (position) {
-            0 -> FilmFragment.newInstance(FilmFragment.MOVIES)
-            1 -> FilmFragment.newInstance(FilmFragment.TVS_SHOW)
-            else -> Fragment()
-        }
-
-    override fun getPageTitle(position: Int): CharSequence? = mContext.resources.getString(
-        TAB_TITLES[position]
-    )
-
-    override fun getCount(): Int = TAB_TITLES.size
-
 }

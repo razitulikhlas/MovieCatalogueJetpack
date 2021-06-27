@@ -3,24 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    tools:context=".fragment.FilmFragment">
+    tools:context=".paging.FragmentPaging">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvFilm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/item_film"
-        />
-    <include layout="@layout/layout_error"
-        android:visibility="gone"
-        android:id="@+id/frameError"
-        />
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressbar"
-        android:layout_gravity="center"
-        android:visibility="gone"
         />
 
 </FrameLayout>

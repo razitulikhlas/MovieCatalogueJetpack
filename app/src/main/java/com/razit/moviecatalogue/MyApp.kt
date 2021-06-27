@@ -1,9 +1,12 @@
 package com.razit.moviecatalogue
 
 import android.app.Application
+import androidx.room.Room
+import com.razit.moviecatalogue.data.local.DatabaseMovies
 import com.razit.moviecatalogue.data.maping.NetworkMapperMovies
 import com.razit.moviecatalogue.data.remote.ApiClient
 import com.razit.moviecatalogue.data.remote.RemoteDataSourceImp
+import com.razit.moviecatalogue.paging.MoviesPagingSource
 import com.razit.moviecatalogue.repository.RepositoryMoviesImpl
 import com.razit.moviecatalogue.viewmodel.FilmViewModel
 import org.koin.android.ext.koin.androidContext
@@ -25,11 +28,24 @@ class MyApp : Application() {
                     remoteDataSourceModule,
                     mapperMoviesModule,
                     vieModelModule,
-                    repositoryModule
+                    repositoryModule,
+                    moviesPagingSourceModule,
+                    databaseModule
                 )
             )
         }
     }
+}
+
+val databaseModule = module {
+    single { Room.databaseBuilder(androidContext(), DatabaseMovies::class.java, "movies_database")
+        .fallbackToDestructiveMigration()
+        .build()}
+
+    factory {
+        get<DatabaseMovies>().moviesDao
+    }
+//    single { provideMoviesDao(get()) }
 }
 
 val retrofitModule = module {
@@ -49,5 +65,9 @@ val remoteDataSourceModule = module {
 }
 
 val repositoryModule = module {
-    factory { RepositoryMoviesImpl(get()) }
+    factory { RepositoryMoviesImpl(get(),get(),get(),get()) }
+}
+
+val moviesPagingSourceModule = module {
+    factory { MoviesPagingSource(get(),get()) }
 }

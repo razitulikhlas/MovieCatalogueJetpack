@@ -4,7 +4,7 @@
     package="com.razit.moviecatalogue">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MyApp"
@@ -15,10 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieCatalogue"
         tools:ignore="AllowBackup">
-        <activity android:name=".detail.DetailFilm"/>
-        <activity android:name=".HomeActivity"
-            android:parentActivityName=".HomeActivity"
-            />
+        <activity android:name=".detail.DetailFilmLocal"></activity>
+        <activity android:name=".LocalActivity" />
+        <activity android:name=".paging.PagingActivity" />
+        <activity android:name=".detail.DetailFilm" />
+        <activity
+            android:name=".HomeActivity"
+            android:parentActivityName=".HomeActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

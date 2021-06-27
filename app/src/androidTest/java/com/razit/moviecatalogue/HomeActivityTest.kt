@@ -45,6 +45,13 @@ class HomeActivityTest {
     @Test
     fun loadDetailMovies() {
         onView(allOf(isDisplayed(),withId(R.id.rcvFilm))).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, ViewActions.click()))
+        onView(allOf(isDisplayed(),withId(R.id.tvTitle))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.imgPoster))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.ivBack))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvGenre))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvDetailRating))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvLanguage))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvDescription))).check(matches(isDisplayed()))
     }
 
     @Test
@@ -58,5 +65,12 @@ class HomeActivityTest {
     fun loadDetailTvShow() {
         onView(withText(R.string.tvShow)).perform(ViewActions.click())
         onView(allOf(isDisplayed(),withId(R.id.rcvFilm))).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, ViewActions.click()))
+        onView(allOf(isDisplayed(),withId(R.id.tvTitle))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.imgPoster))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.ivBack))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvGenre))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvDetailRating))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvLanguage))).check(matches(isDisplayed()))
+        onView(allOf(isDisplayed(),withId(R.id.tvDescription))).check(matches(isDisplayed()))
     }
 }
